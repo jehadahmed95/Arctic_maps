@@ -26,7 +26,7 @@ for file in l:
         # years.append(file[11:15])
         years[j] = int(file[11:15])
         j = j+1
-years= years.astype(int)
+# years= years.astype(int)
 
 
 app = Dash(__name__, title="Arctic maps analysis")
@@ -44,7 +44,7 @@ app.layout = html.Div( children=[html.H1("Analysis of Arctic Maps."),
                                         ]),
                                  html.H3("Use the slider to select a year and view the ice map for August 15th of that year."
                                         " There are two figures available: one displays the area where ice concentration is 100%, and the other shows areas where ice concentration is 50% or greater."
-                                         " A linear regression model is fit to each figure, the lines that represent the models are shown in grey. Hover around the grey lines to see more information about the linear fit"
+                                         " A linear regression model is fit to each figure, the lines that represent the models are shown in grey. Hover around the grey lines to see more information about the linear fit."
 
 
                                           ),
@@ -158,7 +158,7 @@ def update_year_fig(year_index):
 #     return fig
 
 if __name__ == "__main__":
-    app.run_server(debug = True)
+    app.run_server(debug = True, port = 8071)
 
 
 
