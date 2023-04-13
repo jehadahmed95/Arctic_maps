@@ -158,7 +158,7 @@ def update_year_fig(year_index):
 #     return fig
 
 if __name__ == "__main__":
-    app.run_server(debug = False, port = 8077)
+    app.run_server(debug = True)
 
 
 
