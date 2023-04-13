@@ -44,7 +44,8 @@ app.layout = html.Div( children=[html.H1("Analysis of Arctic Maps."),
                                         ]),
                                  html.H3("Use the slider to select a year and view the ice map for August 15th of that year."
                                         " There are two figures available: one displays the area where ice concentration is 100%, and the other shows areas where ice concentration is 50% or greater."
-                                         " A linear regression model is fit to each figure, the lines that represent the models are shown in grey. Hover around the grey lines to see more information about the linear fit."
+                                         " A linear regression model is fit to each figure, the lines that represent the models are shown in grey. "
+                                         " Hover around the grey lines to see more information about the linear fit."
 
 
                                           ),
@@ -59,7 +60,7 @@ app.layout = html.Div( children=[html.H1("Analysis of Arctic Maps."),
                                             marks={i: str(years[i]) for i in range(len(years))},
                                             step=1,
                                             id="year_slider"
-                                            )], style={"width":"60%" , 'height': '10vh'})
+                                            )], style={"width":"60%"})
                                  ,
                                  dcc.Graph(id="maps_fig", style = {'width': '75vh', 'height': '75vh',"position":"abolute", "top":"10vh"}),
                                  html.Div([html.H2(id = "total_area")]),
@@ -84,9 +85,6 @@ def update_year(year_index):
                     # ,color_continuous_label='Continent',
                     # color_continuous_label_font=dict(size=16)
     )
-
-
-
     fig.update_xaxes(showticklabels = False)
     fig.update_yaxes(showticklabels=False)
     fig.update_layout(title_font_size = 30, title_font_family = "Bahnschrift",
@@ -140,10 +138,6 @@ def update_year_fig(year_index):
     fig.update_yaxes(title=r'Area where ice coverage > 50% [Km2]', title_font_size = 16,title_font_family = "Bahnschrift")
     fig.update_layout(title_font_size = 20, title_font_family = "Bahnschrift",
                       paper_bgcolor="LightSteelBlue")
-    # Area
-    # where
-    # ice
-    # coverage > 50 % [$Km ^ 2$]
     fig.add_scatter(x = [years[year_index]],y = [ice_area50[year_index]], mode = "markers",
                     marker= dict(color="blue", size=12), name=f'Area 50% covered by ice in km2',showlegend=True)
     return fig
