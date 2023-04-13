@@ -29,6 +29,7 @@ for file in l:
     j = j+1
 
 years= years.astype(int)
+print(years)
 
 
 
@@ -55,13 +56,11 @@ app.layout = html.Div( children=[html.H1("Analysis of Arctic Maps."),
                                  html.Div([dcc.Slider(
                                             min=0,
                                             max=len(years)-1,
-                                            # min= years[0],
-                                            # max= years[-1],
                                             value=0,
                                             marks={i: str(years[i]) for i in range(len(years))},
                                             step=1,
                                             id="year_slider"
-                                            )], style={"width":"60%"})
+                                            )])
                                  ,
                                  dcc.Graph(id="maps_fig", style = {'width': '75vh', 'height': '75vh',"position":"abolute", "top":"10vh"}),
                                  html.Div([html.H2(id = "total_area")]),
