@@ -5,5 +5,4 @@ gunicorn
 pandas
 dash-tools
 statsmodels
-glob
 
