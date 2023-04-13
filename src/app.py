@@ -2,31 +2,30 @@ import numpy as np
 from dash import Dash, Output,Input, html, dcc
 import plotly.express as px
 import glob
-years = np.zeros(16)
-# years = []
-j = 0
+
+
 l = glob.glob("./ice_data/*.npy")
 ice_area = np.load("./ice_data_area.npy")
+
+
 ice_area100 = np.zeros(16)
 ice_area50 = np.zeros(16)
 ice_mean = np.zeros(16)
-
+years = np.zeros(16)
+j = 0
 sat_maps = []
+
 for file in l:
-    if "815" in file:
-        img = np.load(file)
-        # data_raw[j] = np.load(l[j])
-        sat_maps.append(np.array(img))
-        img[np.isnan(img)] = 0
-        ice_area100[j] = np.sum(ice_area[img == 100])
-        ice_area50[j] = np.sum(ice_area[img > 50])
-        ice_mean[j] = np.mean(img)
-        # data_raw[np.isnan(data_raw)] = 0
-        # data.append(data_raw[j])
-        # years.append(file[11:15])
-        years[j] = int(file[11:15])
-        j = j+1
-# years= years.astype(int)
+    img = np.load(file)
+    sat_maps.append(np.array(img))
+    img[np.isnan(img)] = 0
+    ice_area100[j] = np.sum(ice_area[img == 100])
+    ice_area50[j] = np.sum(ice_area[img > 50])
+    ice_mean[j] = np.mean(img)
+    years[j] = int(file[11:15])
+    j = j+1
+
+years= years.astype(int)
 
 
 app = Dash(__name__, title="Arctic maps analysis")
@@ -152,7 +151,7 @@ def update_year_fig(year_index):
 #     return fig
 
 if __name__ == "__main__":
-    app.run_server(debug = True, port = 8071)
+    app.run_server(debug = True)
 
 
 
