@@ -27,52 +27,51 @@ for file in l:
     ice_mean[j] = np.mean(img)
     years[j] = int(file[11:15])
     j = j+1
-
 years= years.astype(int)
-print(years)
-
-
-
 # , external_stylesheets=[dbc.themes.CYBORG]
-app.layout = html.Div( children=[html.H1("Analysis of Arctic Maps."),
+app.layout = html.Div([
+                                 html.H1("Analysis of Arctic Maps."),
                                  html.H3(["This is a presentation of satellite images of the Arctic Ocean from the year 2003 to 2019."
-                                        "This a small subset of the complete satellite data set, with only one map, on the 15th of August, is presented for each year." 
-                                        "All the data were downloaded from ", html.A("here. ", href="https://seaice.uni-bremen.de/data-archive/"),
+                                         "This a small subset of the complete satellite data set, with only one map, on the 15th of August, is presented for each year." 
+                                        "All the data were downloaded from ",
+                                        html.A("here. ", href="https://seaice.uni-bremen.de/data-archive/"),
                                         " The data used in this problem set was collected by two different satellite missions. Involved are the "
                                         "AMSR-E instrument on the Aqua satellite (data from 2002 to 2011) and the AMSR2 instrument on the GCOM-W satellite (data from 2013 to 2019)."
                                         " The data consist of maps of the concentration of ice in the Arctic collected between 2002 and 2019 with the exception of 2012.\n"
-
-
-                                        ]),
-                                 html.H3("Use the slider to select a year and view the ice map for August 15th of that year."
+                                        "Use the slider to select a year and view the ice map for August 15th of that year."
                                         " There are two figures available: one displays the area where ice concentration is 100%, and the other shows areas where ice concentration is 50% or greater."
-                                         " A linear regression model is fit to each figure, the lines that represent the models are shown in grey. "
-                                         " Hover around the grey lines to see more information about the linear fit."
+                                        " A linear regression model is fit to each figure, the lines that represent the models are shown in grey. "
+                                        " Hover around the grey lines to see more information about the linear fit."]),
+            html.Div([
+                    dcc.Slider(
+                                min=0,
+                                max=len(years)-1,
+                                value=0,
+                                marks={i: str(years[i]) for i in range(len(years))},
+                                step=1,
+                                id="year_slider"
+                                )
+                                ]),
+            html.Div(
+                [dcc.Graph(id="maps_fig")]),
+            html.Div([dcc.Graph(id = "ice_area100_fig"),
+                      dcc.Graph(id="ice_area50_fig")])
 
 
-                                          ),
-                                          # " In addition to the area where ice concentration is 100% and smaller or equal to 50% as a function of the year. ",
-                                 # dcc.Dropdown(options = [{"label":year, "value":year} for year in years]),
-                                 html.Div([dcc.Slider(
-                                            min=0,
-                                            max=len(years)-1,
-                                            value=0,
-                                            marks={i: str(years[i]) for i in range(len(years))},
-                                            step=1,
-                                            id="year_slider"
-                                            )])
-                                 ,
-                                 dcc.Graph(id="maps_fig", style = {'width': '75vh', 'height': '75vh',"position":"abolute", "top":"10vh"}),
-                                 html.Div([html.H2(id = "total_area")]),
+                                 # dcc.Graph(id="maps_fig", style = {'width': '75vh', 'height': '75vh',"position":"abolute", "top":"10vh"}),
+                                 # html.Div([html.H2(id = "total_area")]),
                                  # dcc.Graph(id = "total_area_fig")
-                                 dcc.Graph(id = "ice_area100_fig", style = {'width': '100vh', 'height': '40vh',
-                                                                            "position": "absolute", "top":"30vh", "right":"20vh"}),
-                                 dcc.Graph(id="ice_area50_fig", style = {'width': '100vh', 'height': '40vh',
-                                                                            "position": "absolute", "top":"70vh", "right":"20vh"}),
+                                 # dcc.Graph(id = "ice_area100_fig", style = {'width': '40%', 'height': '40%',
+                                 #                                            "position": "absolute", "top":"30%", "right":"20%"}),
+                                 # dcc.Graph(id="ice_area50_fig", style = {'width': '40%', 'height': '40%',
+                                 #                                            "position": "absolute", "top":"70%", "right":"20%"}),
+
                                  # dcc.Graph(id="ice_mean_fig", style={'width': '80vh', 'height': '30vh',
                                  #                                        "position": "absolute", "top": "80vh",
                                  #                                        "right": "45vh"})
-                                ]
+                   ],
+                  style = {'width': '80%', 'margin': '0 auto'}
+
                     )
 @app.callback(Output("maps_fig", "figure"),
               Input("year_slider","value")
