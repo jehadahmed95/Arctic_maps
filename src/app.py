@@ -25,7 +25,7 @@ for file in l:
     ice_area100[j] = np.sum(ice_area[img == 100])
     ice_area50[j] = np.sum(ice_area[img > 50])
     ice_mean[j] = np.mean(img)
-    years[j] = int(file[11:15])
+    years[j] = file[11:15]
     j = j+1
 years= years.astype(int)
 # , external_stylesheets=[dbc.themes.CYBORG]
