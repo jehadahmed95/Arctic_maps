@@ -3,6 +3,9 @@ from dash import Dash, Output,Input, html, dcc
 import plotly.express as px
 import glob
 
+app = Dash(__name__, title="Arctic maps analysis")
+server = app.server
+
 
 l = glob.glob("./ice_data/*.npy")
 ice_area = np.load("./ice_data_area.npy")
@@ -28,8 +31,7 @@ for file in l:
 years= years.astype(int)
 
 
-app = Dash(__name__, title="Arctic maps analysis")
-server = app.server
+
 # , external_stylesheets=[dbc.themes.CYBORG]
 app.layout = html.Div( children=[html.H1("Analysis of Arctic Maps."),
                                  html.H3(["This is a presentation of satellite images of the Arctic Ocean from the year 2003 to 2019."
