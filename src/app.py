@@ -14,7 +14,8 @@ ice_area = np.load("./ice_data_area.npy")
 ice_area100 = np.zeros(16)
 ice_area50 = np.zeros(16)
 ice_mean = np.zeros(16)
-years = np.zeros(16)
+# years = np.zeros(16)
+years = []
 j = 0
 sat_maps = []
 
@@ -25,9 +26,11 @@ for file in l:
     ice_area100[j] = np.sum(ice_area[img == 100])
     ice_area50[j] = np.sum(ice_area[img > 50])
     ice_mean[j] = np.mean(img)
-    years[j] = file[11:15]
+    # years[j] = file[11:15]
+    years.append(file[11:15])
     j = j+1
-years= years.astype(int)
+
+years= np.array(years).astype(int)
 # , external_stylesheets=[dbc.themes.CYBORG]
 app.layout = html.Div([
                                  html.H1("Analysis of Arctic Maps."),
@@ -53,9 +56,9 @@ app.layout = html.Div([
                                 )
                                 ]),
             html.Div(
-                [dcc.Graph(id="maps_fig")]),
+                [dcc.Graph(id="maps_fig")], style={"position":"absolute", "left":"0%", "width":"75vh", "height":"75vh"}),
             html.Div([dcc.Graph(id = "ice_area100_fig"),
-                      dcc.Graph(id="ice_area50_fig")])
+                      dcc.Graph(id="ice_area50_fig")], style={"position":"absolute", "right":"0%", "width":"130vh", "height":"40vh"})
 
 
                                  # dcc.Graph(id="maps_fig", style = {'width': '75vh', 'height': '75vh',"position":"abolute", "top":"10vh"}),
@@ -69,8 +72,8 @@ app.layout = html.Div([
                                  # dcc.Graph(id="ice_mean_fig", style={'width': '80vh', 'height': '30vh',
                                  #                                        "position": "absolute", "top": "80vh",
                                  #                                        "right": "45vh"})
-                   ],
-                  style = {'width': '80%', 'margin': '0 auto'}
+                   ]
+                  # ,style = {'width': '80%', 'margin': '0 auto'}
 
                     )
 @app.callback(Output("maps_fig", "figure"),
@@ -151,7 +154,7 @@ def update_year_fig(year_index):
 #     return fig
 
 if __name__ == "__main__":
-    app.run_server(debug = True, port = 8071)
+    app.run_server(debug = True)
 
 
 
