@@ -29,7 +29,8 @@ for file in l:
     years.append(file[11:15])
     j = j+1
 
-years= np.array(years).astype(int)
+years= np.sort(np.array(years).astype(int))
+
 # , external_stylesheets=[dbc.themes.CYBORG]
 app.layout = html.Div([
                                  html.H1("Analysis of Arctic Maps."),
@@ -110,9 +111,8 @@ def update_year(year_index):
 def update_year_fig(year_index):
     year = [i for i in years]
     # fig, ax = plt.subplots()
-    fig = px.line(x = years, y = ice_area100,title = "Area totally covered by ice in squared kilometer")
-    # trendline = 'ols', trendline_scope = "overall",
-    # trendline_color_override = "grey",
+    fig = px.scatter(x = years, y = ice_area100,title = "Area totally covered by ice in squared kilometer", trendline = 'ols', trendline_scope = "overall",
+                     trendline_color_override = "grey")
     fig.update_xaxes(title ="Years", title_font_size = 16,title_font_family = "Bahnschrift")
     fig.update_yaxes(title="Area totally covered by ice [Km2]", title_font_size = 16,title_font_family = "Bahnschrift")
     fig.update_layout(title_font_size = 20, title_font_family = "Bahnschrift",
@@ -122,8 +122,8 @@ def update_year_fig(year_index):
     # fig = px.line(x = years, y = pred_area100)
     # fig.add_scatter(trendline = "ols")
 
-    # fig.add_scatter(x = [years[year_index]],y = [ice_area100[year_index]], mode = "markers",
-    #                 marker= dict(color="blue", size=12),name = f'Area totally covered by ice in km2', showlegend=True)
+    fig.add_scatter(x = [years[year_index]],y = [ice_area100[year_index]], mode = "markers",
+                    marker= dict(color="blue", size=12),name = f'Area totally covered by ice in km2', showlegend=True)
     return fig
 @app.callback(Output("ice_area50_fig", "figure"),
               Input("year_slider", "value"))
@@ -136,8 +136,8 @@ def update_year_fig(year_index):
     fig.update_yaxes(title=r'Area where ice coverage > 50% [Km2]', title_font_size = 16,title_font_family = "Bahnschrift")
     fig.update_layout(title_font_size = 20, title_font_family = "Bahnschrift",
                       paper_bgcolor="LightSteelBlue")
-    # fig.add_scatter(x = [years[year_index]],y = [ice_area50[year_index]], mode = "markers",
-    #                 marker= dict(color="blue", size=12), name=f'Area 50% covered by ice in km2',showlegend=True)
+    fig.add_scatter(x = [years[year_index]],y = [ice_area50[year_index]], mode = "markers",
+                    marker= dict(color="blue", size=12), name=f'Area 50% covered by ice in km2',showlegend=True)
     return fig
 # @app.callback(Output("ice_mean_fig", "figure"),
 #               Input("year_slider", "value"))
