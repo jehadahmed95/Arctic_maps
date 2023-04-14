@@ -111,8 +111,9 @@ def update_year(year_index):
 def update_year_fig(year_index):
     year = [i for i in years]
     # fig, ax = plt.subplots()
-    fig = px.scatter(x = years, y = ice_area100,title = "Area totally covered by ice in squared kilometer", trendline = 'ols', trendline_scope = "overall",
-                     trendline_color_override = "grey")
+    fig = px.scatter(x = years, y = ice_area100,title = "Area totally covered by ice in squared kilometer")
+                   # , trendline = 'ols', trendline_scope = "overall",
+                   #   trendline_color_override = "grey")
     fig.update_xaxes(title ="Years", title_font_size = 16,title_font_family = "Bahnschrift")
     fig.update_yaxes(title="Area totally covered by ice [Km2]", title_font_size = 16,title_font_family = "Bahnschrift")
     fig.update_layout(title_font_size = 20, title_font_family = "Bahnschrift",
@@ -130,8 +131,8 @@ def update_year_fig(year_index):
 def update_year_fig(year_index):
     year = [i for i in years]
     # fig, ax = plt.subplots()
-    fig = px.scatter(x = years, y = ice_area50, title = "Area with at least 50% of ice concentration in squared kilometer",
-                     trendline = 'ols', trendline_scope = "overall",trendline_color_override = "grey")
+    fig = px.scatter(x = years, y = ice_area50, title = "Area with at least 50% of ice concentration in squared kilometer")
+                     # ,trendline = 'ols', trendline_scope = "overall",trendline_color_override = "grey")
     fig.update_xaxes(title="Years", title_font_size = 16,title_font_family = "Bahnschrift")
     fig.update_yaxes(title=r'Area where ice coverage > 50% [Km2]', title_font_size = 16,title_font_family = "Bahnschrift")
     fig.update_layout(title_font_size = 20, title_font_family = "Bahnschrift",
