@@ -152,7 +152,7 @@ def update_year_fig(year_index):
 #                     marker= dict(color="blue", size=12), name="",  showlegend=False)
 #     return fig
 if __name__ == "__main__":
-    app.run_server(debug = True)
+    app.run_server(debug = True, port = 8071)
 
 
 
