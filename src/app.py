@@ -125,8 +125,8 @@ def update_year_fig(year_index):
     # fig = px.line(x = years, y = pred_area100)
     # fig.add_scatter(trendline = "ols")
 
-    # fig.add_scatter(x = [years[year_index]],y = [ice_area100[year_index]], mode = "markers",
-    #                 marker= dict(color="blue", size=12),name = f'Area totally covered by ice in km2', showlegend=True)
+    fig.add_scatter(x = [years[year_index]],y = [ice_area100[year_index]], mode = "markers",
+                    marker= dict(color="blue", size=12),name = f'Area totally covered by ice in km2', showlegend=True)
     return fig
 @app.callback(Output("ice_area50_fig", "figure"),
               Input("year_slider", "value"))
@@ -139,8 +139,8 @@ def update_year_fig(year_index):
     fig.update_yaxes(title=r'Area where ice coverage > 50% [Km2]', title_font_size = 16,title_font_family = "Bahnschrift")
     fig.update_layout(title_font_size = 20, title_font_family = "Bahnschrift",
                       paper_bgcolor="LightSteelBlue")
-    # fig.add_scatter(x = [years[year_index]],y = [ice_area50[year_index]], mode = "markers",
-    #                 marker= dict(color="blue", size=12), name=f'Area 50% covered by ice in km2',showlegend=True)
+    fig.add_scatter(x = [years[year_index]],y = [ice_area50[year_index]], mode = "markers",
+                    marker= dict(color="blue", size=12), name=f'Area 50% covered by ice in km2',showlegend=True)
     return fig
 # @app.callback(Output("ice_mean_fig", "figure"),
 #               Input("year_slider", "value"))
