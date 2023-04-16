@@ -2,6 +2,11 @@ import numpy as np
 from dash import Dash, Output,Input, html, dcc
 import plotly.express as px
 import glob
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score, mean_squared_error
+import plotly.graph_objects as go
+
+
 
 app = Dash(__name__, title="Arctic maps analysis")
 server = app.server
@@ -14,8 +19,8 @@ ice_area = np.load("./ice_data_area.npy")
 ice_area100 = np.zeros(16)
 ice_area50 = np.zeros(16)
 # ice_mean = np.zeros(16)
-# years = np.zeros(16)
-years = []
+years = np.zeros(16)
+# years = []
 j = 0
 sat_maps = []
 
@@ -26,11 +31,28 @@ for file in l:
     ice_area100[j] = np.sum(ice_area[img == 100])
     ice_area50[j] = np.sum(ice_area[img > 50])
     # ice_mean[j] = np.mean(img)
-    # years[j] = file[11:15]
-    years.append(file[11:15])
+    years[j] = int(file[11:15])
+    # years.append(file[11:15])
     j = j+1
 
-years= np.sort(np.array(years).astype(int))
+years= np.sort(years.astype(int))
+##########################################
+##########################################
+##########################################
+linear_reg_100 = LinearRegression()
+linear_reg_100.fit(years.reshape(-1, 1), ice_area100)
+y100_pred = linear_reg_100.predict(years.reshape(-1, 1))
+##########################################
+##########################################
+##########################################
+linear_reg_50 = LinearRegression()
+linear_reg_50.fit(years.reshape(-1, 1), ice_area50)
+y50_pred = linear_reg_50.predict(years.reshape(-1, 1))
+
+
+# fig = px.line(y_pred,years)
+# fig.show()
+# print(y_pred)
 
 # , external_stylesheets=[dbc.themes.CYBORG]
 app.layout = html.Div([
@@ -44,8 +66,8 @@ app.layout = html.Div([
                                         " The data consist of maps of the concentration of ice in the Arctic collected between 2002 and 2019 with the exception of 2012.\n"
                                         "Use the slider to select a year and view the ice map for August 15th of that year."
                                         " There are two figures available: one displays the area where ice concentration is 100%, and the other shows areas where ice concentration is 50% or greater."
-                                        " A linear regression model is fit to each figure, the lines that represent the models are shown in grey. "
-                                        " Hover around the grey lines to see more information about the linear fit."]),
+                                        " A linear regression model is fit to each figure, the lines that represent the models are shown in red. "
+                                        " Hover around the red lines to see more information about the linear fit."]),
             html.Div([
                     dcc.Slider(
                                 min=0,
@@ -57,9 +79,9 @@ app.layout = html.Div([
                                 )
                                 ]),
             html.Div(
-                [dcc.Graph(id="maps_fig")], style={"position":"absolute", "left":"0%", "width":"75vh", "height":"75vh"}),
+                [dcc.Graph(id="maps_fig", style={"width":"75vh", "height":"75vh"})], style={"position":"absolute", "left":"5%", "width":"55vh", "height":"55vh"}),
             html.Div([dcc.Graph(id = "ice_area100_fig"),
-                      dcc.Graph(id="ice_area50_fig")], style={"position":"absolute", "right":"0%", "width":"130vh", "height":"40vh"})
+                      dcc.Graph(id="ice_area50_fig")], style={"position":"absolute", "right":"5%", "width":"100vh", "height":"40vh"})
 
 
                                  # dcc.Graph(id="maps_fig", style = {'width': '75vh', 'height': '75vh',"position":"abolute", "top":"10vh"}),
@@ -112,9 +134,19 @@ def update_year(year_index):
 def update_year_fig(year_index):
     year = [i for i in years]
     # fig, ax = plt.subplots()
-    fig = px.line(x = years, y = ice_area100,title = "Area totally covered by ice in squared kilometer")
+    fig_data = go.Scatter(x = years, y = ice_area100,name = "Area in km2")
+    # , title = "Area totally covered by ice in squared kilometer"
                #  , trendline = 'ols', trendline_scope = "overall",
                #       trendline_color_override = "grey")''
+    # fig.add_shape(x = years, y= y_pred)
+        # = px.line(y_pred, years)
+    fig_fit = go.Scatter(x= years, y = y100_pred,
+                         hovertext=f"R2 = {r2_score(ice_area100,y100_pred)} , mean_squared_error = {mean_squared_error(ice_area100,y100_pred)}"
+                         ,name = "Linear fit")
+                         # ,hovertext= f"mean_squared_error = {mean_squared_error(ice_area100,y100_pred)}")
+    figures = [fig_data,fig_fit]
+    fig = go.Figure(data= figures)
+    fig.update_layout(hovermode="x unified")
     fig.update_xaxes(title ="Years", title_font_size = 16,title_font_family = "Bahnschrift")
     fig.update_yaxes(title="Area totally covered by ice [Km2]", title_font_size = 16,title_font_family = "Bahnschrift")
     fig.update_layout(title_font_size = 20, title_font_family = "Bahnschrift",
@@ -125,21 +157,31 @@ def update_year_fig(year_index):
     # fig.add_scatter(trendline = "ols")
 
     fig.add_scatter(x = [years[year_index]],y = [ice_area100[year_index]], mode = "markers",
-                    marker= dict(color="blue", size=12),name = f'Area totally covered by ice in km2', showlegend=True)
+                    marker= dict(color="blue", size=12),name = f'Area totally covered by ice in km2', showlegend=False)
+    fig.add_scatter(x=[years[year_index]], y=[y100_pred[year_index]], mode="markers",
+                    marker=dict(color="red", size=12), showlegend=False)
     return fig
 @app.callback(Output("ice_area50_fig", "figure"),
               Input("year_slider", "value"))
 def update_year_fig(year_index):
     year = [i for i in years]
     # fig, ax = plt.subplots()
-    fig = px.line(x = years, y = ice_area50, title = "Area with at least 50% of ice concentration in squared kilometer")
+    fig_data = go.Scatter(x = years, y = ice_area50,name = "Area in km2")
+    fig_fit = go.Scatter(x=years, y=y50_pred,hovertext=f"R2 = {r2_score(ice_area50,y50_pred)} , mean_squared_error = {mean_squared_error(ice_area50,y50_pred)}"
+                         ,name = "Linear fit")
+    # , title = "Area with at least 50% of ice concentration in squared kilometer"
                      # ,trendline = 'ols', trendline_scope = "overall",trendline_color_override = "grey")
+    figures = [fig_data, fig_fit]
+    fig = go.Figure(data=figures)
+    fig.update_layout(hovermode="x unified")
     fig.update_xaxes(title="Years", title_font_size = 16,title_font_family = "Bahnschrift")
-    fig.update_yaxes(title=r'Area where ice coverage > 50% [Km2]', title_font_size = 16,title_font_family = "Bahnschrift")
+    fig.update_yaxes( title = "Area where ice concentration is at least 50% [Km2]", title_font_size = 16,title_font_family = "Bahnschrift")
     fig.update_layout(title_font_size = 20, title_font_family = "Bahnschrift",
                       paper_bgcolor="LightSteelBlue")
     fig.add_scatter(x = [years[year_index]],y = [ice_area50[year_index]], mode = "markers",
-                    marker= dict(color="blue", size=12), name=f'Area 50% covered by ice in km2',showlegend=True)
+                    marker= dict(color="blue", size=12), name=f'Area 50% covered by ice in km2',showlegend=False)
+    fig.add_scatter(x=[years[year_index]], y=[y50_pred[year_index]], mode="markers",
+                    marker=dict(color="red", size=12), showlegend=False)
     return fig
 # @app.callback(Output("ice_mean_fig", "figure"),
 #               Input("year_slider", "value"))
