@@ -2,6 +2,7 @@ import numpy as np
 from dash import Dash, Output,Input, html, dcc
 import plotly.express as px
 import glob
+import sklearn
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score, mean_squared_error
 import plotly.graph_objects as go
