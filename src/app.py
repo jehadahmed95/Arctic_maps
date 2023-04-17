@@ -7,19 +7,14 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score, mean_squared_error
 import plotly.graph_objects as go
 
-
-
 app = Dash(__name__, title="Arctic maps analysis")
 server = app.server
 
-
-l = glob.glob("./ice_data/*.npy")
+l = sorted(glob.glob("./ice_data/*.npy"))
 ice_area = np.load("./ice_data_area.npy")
-
 
 ice_area100 = np.zeros(16)
 ice_area50 = np.zeros(16)
-# ice_mean = np.zeros(16)
 years = np.zeros(16)
 # years = []
 j = 0
@@ -31,11 +26,9 @@ for file in l:
     img[np.isnan(img)] = 0
     ice_area100[j] = np.sum(ice_area[img == 100])
     ice_area50[j] = np.sum(ice_area[img > 50])
-    # ice_mean[j] = np.mean(img)
     years[j] = int(file[11:15])
     # years.append(file[11:15])
     j = j+1
-
 years= np.sort(years.astype(int))
 linear_reg_100 = LinearRegression()
 linear_reg_100.fit(years.reshape(-1, 1), ice_area100)
@@ -44,12 +37,6 @@ linear_reg_50 = LinearRegression()
 linear_reg_50.fit(years.reshape(-1, 1), ice_area50)
 y50_pred = linear_reg_50.predict(years.reshape(-1, 1))
 
-
-# fig = px.line(y_pred,years)
-# fig.show()
-# print(y_pred)
-
-# , external_stylesheets=[dbc.themes.CYBORG]
 app.layout = html.Div([
                                  html.H1("Analysis of Arctic Maps."),
                                  html.H3(["This is a presentation of satellite images of the Arctic Ocean from the year 2003 to 2019."
@@ -76,34 +63,16 @@ app.layout = html.Div([
             html.Div(
                 [dcc.Graph(id="maps_fig", style={"width":"75vh", "height":"75vh"})], style={"position":"absolute", "left":"5%", "width":"55vh", "height":"55vh"}),
             html.Div([dcc.Graph(id = "ice_area100_fig"),
-                      dcc.Graph(id="ice_area50_fig")], style={"position":"absolute", "right":"5%", "width":"100vh", "height":"40vh"})
+                      dcc.Graph(id="ice_area50_fig")], style={"position":"absolute", "right":"5%", "width":"100vh", "height":"40vh"})]
+)
 
-
-                                 # dcc.Graph(id="maps_fig", style = {'width': '75vh', 'height': '75vh',"position":"abolute", "top":"10vh"}),
-                                 # html.Div([html.H2(id = "total_area")]),
-                                 # dcc.Graph(id = "total_area_fig")
-                                 # dcc.Graph(id = "ice_area100_fig", style = {'width': '40%', 'height': '40%',
-                                 #                                            "position": "absolute", "top":"30%", "right":"20%"}),
-                                 # dcc.Graph(id="ice_area50_fig", style = {'width': '40%', 'height': '40%',
-                                 #                                            "position": "absolute", "top":"70%", "right":"20%"}),
-
-                                 # dcc.Graph(id="ice_mean_fig", style={'width': '80vh', 'height': '30vh',
-                                 #                                        "position": "absolute", "top": "80vh",
-                                 #                                        "right": "45vh"})
-                   ]
-                  # ,style = {'width': '80%', 'margin': '0 auto'}
-
-                    )
 @app.callback(Output("maps_fig", "figure"),
-              Input("year_slider","value")
-              )
+              Input("year_slider","value"))
 def update_year(year_index):
     image = sat_maps[year_index]
     fig = px.imshow(image, color_continuous_scale='teal',
                     labels=dict(color="Ice concentration [%]")
                     ,title=f"Arctic map on the 15th of August {years[year_index]}"
-                    # ,color_continuous_label='Continent',
-                    # color_continuous_label_font=dict(size=16)
     )
     fig.update_xaxes(showticklabels = False)
     fig.update_yaxes(showticklabels=False)
@@ -111,18 +80,6 @@ def update_year(year_index):
                       paper_bgcolor="LightSteelBlue")
     return fig
 
-# @app.callback(Output("total_area", "children"),
-#               Input("year_slider","value")
-#               )
-# def update_year_ice100(year_index):
-#     image = ice_area100[year_index]
-#     year = [i for i in years]
-#     # fig = px.imshow(image)
-#     # fig.update_layout(coloraxis_colorbar= dict(tickvals = [""], ticktext=[""]))
-#     n = 0
-#     # for i in years:
-#     return f"Area totally covered by ice in {year[year_index]} is {ice_area100[year_index]:,.2f} squared km"
-        # n = n+1
 @app.callback(Output("ice_area100_fig", "figure"),
               Input("year_slider", "value"))
 def update_year_fig(year_index):
@@ -163,4 +120,4 @@ def update_year_fig(year_index):
     #                 marker=dict(color="red", size=12), showlegend=False)
     return fig
 if __name__ == "__main__":
-    app.run_server(debug = False)
+    app.run_server(debug = True)
