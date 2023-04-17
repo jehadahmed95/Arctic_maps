@@ -127,10 +127,10 @@ def update_year(year_index):
               Input("year_slider", "value"))
 def update_year_fig(year_index):
     year = [i for i in years]
-    fig_data100 = go.Scatter(x = years, y = ice_area100,name = "Area in km2")
+    fig_data100 = go.Scatter(x = years, y = ice_area100,name = "Area in km2", mode = "lines + markers",marker= dict(color="blue", size=12))
     fig_fit100 = go.Scatter(x= years, y = y100_pred,
                          hovertext=f"R2 = {r2_score(ice_area100,y100_pred)} , mean_squared_error = {mean_squared_error(ice_area100,y100_pred)}"
-                         ,name = "Linear fit")
+                         ,name = "Linear fit", mode = "lines + markers",marker= dict(color="red", size=12))
     figures100 = [fig_data100,fig_fit100]
     fig = go.Figure(data= figures100)
     fig.update_layout(hovermode="x unified")
@@ -138,18 +138,18 @@ def update_year_fig(year_index):
     fig.update_yaxes(title="Area totally covered by ice [Km2]", title_font_size = 16,title_font_family = "Bahnschrift")
     fig.update_layout(title_font_size = 20, title_font_family = "Bahnschrift",
                       paper_bgcolor="LightSteelBlue")
-    fig.add_scatter(x = [years[year_index]],y = [ice_area100[year_index]], mode = "markers",
-                    marker= dict(color="blue", size=12),name = f'Area totally covered by ice in km2', showlegend=False)
-    fig.add_scatter(x=[years[year_index]], y=[y100_pred[year_index]], mode="markers",
-                    marker=dict(color="red", size=12), showlegend=False)
+    # fig.add_scatter(x = [years[year_index]],y = [ice_area100[year_index]], mode = "markers",
+    #                 marker= dict(color="blue", size=12),name = f'Area totally covered by ice in km2', showlegend=False)
+    # fig.add_scatter(x=[years[year_index]], y=[y100_pred[year_index]], mode="markers",
+    #                 marker=dict(color="red", size=12), showlegend=False)
     return fig
 @app.callback(Output("ice_area50_fig", "figure"),
               Input("year_slider", "value"))
 def update_year_fig(year_index):
     year = [i for i in years]
-    fig_data50 = go.Scatter(x = years, y = ice_area50,name = "Area in km2")
+    fig_data50 = go.Scatter(x = years, y = ice_area50,name = "Area in km2", mode = "lines + markers",marker= dict(color="blue", size=12))
     fig_fit50 = go.Scatter(x=years, y=y50_pred,hovertext=f"R2 = {r2_score(ice_area50,y50_pred)} , mean_squared_error = {mean_squared_error(ice_area50,y50_pred)}"
-                         ,name = "Linear fit")
+                         ,name = "Linear fit", mode = "lines + markers",marker= dict(color="red", size=12))
     figures50 = [fig_data50, fig_fit50]
     fig = go.Figure(data=figures50)
     fig.update_layout(hovermode="x unified")
@@ -157,10 +157,10 @@ def update_year_fig(year_index):
     fig.update_yaxes( title = "Area where ice concentration is at least 50% [Km2]", title_font_size = 16,title_font_family = "Bahnschrift")
     fig.update_layout(title_font_size = 20, title_font_family = "Bahnschrift",
                       paper_bgcolor="LightSteelBlue")
-    fig.add_scatter(x = [years[year_index]],y = [ice_area50[year_index]], mode = "markers",
-                    marker= dict(color="blue", size=12), name=f'Area 50% covered by ice in km2',showlegend=False)
-    fig.add_scatter(x=[years[year_index]], y=[y50_pred[year_index]], mode="markers",
-                    marker=dict(color="red", size=12), showlegend=False)
+    # fig.add_scatter(x = [years[year_index]],y = [ice_area50[year_index]], mode = "markers",
+    #                 marker= dict(color="blue", size=12), name=f'Area 50% covered by ice in km2',showlegend=False)
+    # fig.add_scatter(x=[years[year_index]], y=[y50_pred[year_index]], mode="markers",
+    #                 marker=dict(color="red", size=12), showlegend=False)
     return fig
 if __name__ == "__main__":
     app.run_server(debug = False)
