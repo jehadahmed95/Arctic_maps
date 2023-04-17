@@ -135,18 +135,18 @@ def update_year(year_index):
 def update_year_fig(year_index):
     year = [i for i in years]
     # fig, ax = plt.subplots()
-    fig_data = go.Scatter(x = years, y = ice_area100,name = "Area in km2")
+    fig_data100 = go.Scatter(x = years, y = ice_area100,name = "Area in km2")
     # , title = "Area totally covered by ice in squared kilometer"
                #  , trendline = 'ols', trendline_scope = "overall",
                #       trendline_color_override = "grey")''
     # fig.add_shape(x = years, y= y_pred)
         # = px.line(y_pred, years)
-    fig_fit = go.Scatter(x= years, y = y100_pred,
+    fig_fit100 = go.Scatter(x= years, y = y100_pred,
                          hovertext=f"R2 = {r2_score(ice_area100,y100_pred)} , mean_squared_error = {mean_squared_error(ice_area100,y100_pred)}"
                          ,name = "Linear fit")
                          # ,hovertext= f"mean_squared_error = {mean_squared_error(ice_area100,y100_pred)}")
-    figures = [fig_data,fig_fit]
-    fig = go.Figure(data= figures)
+    figures100 = [fig_data100,fig_fit100]
+    fig = go.Figure(data= figures100)
     fig.update_layout(hovermode="x unified")
     fig.update_xaxes(title ="Years", title_font_size = 16,title_font_family = "Bahnschrift")
     fig.update_yaxes(title="Area totally covered by ice [Km2]", title_font_size = 16,title_font_family = "Bahnschrift")
@@ -167,13 +167,13 @@ def update_year_fig(year_index):
 def update_year_fig(year_index):
     year = [i for i in years]
     # fig, ax = plt.subplots()
-    fig_data = go.Scatter(x = years, y = ice_area50,name = "Area in km2")
-    fig_fit = go.Scatter(x=years, y=y50_pred,hovertext=f"R2 = {r2_score(ice_area50,y50_pred)} , mean_squared_error = {mean_squared_error(ice_area50,y50_pred)}"
+    fig_data50 = go.Scatter(x = years, y = ice_area50,name = "Area in km2")
+    fig_fit50 = go.Scatter(x=years, y=y50_pred,hovertext=f"R2 = {r2_score(ice_area50,y50_pred)} , mean_squared_error = {mean_squared_error(ice_area50,y50_pred)}"
                          ,name = "Linear fit")
     # , title = "Area with at least 50% of ice concentration in squared kilometer"
                      # ,trendline = 'ols', trendline_scope = "overall",trendline_color_override = "grey")
-    figures = [fig_data, fig_fit]
-    fig = go.Figure(data=figures)
+    figures50 = [fig_data50, fig_fit50]
+    fig = go.Figure(data=figures50)
     fig.update_layout(hovermode="x unified")
     fig.update_xaxes(title="Years", title_font_size = 16,title_font_family = "Bahnschrift")
     fig.update_yaxes( title = "Area where ice concentration is at least 50% [Km2]", title_font_size = 16,title_font_family = "Bahnschrift")
@@ -195,10 +195,3 @@ def update_year_fig(year_index):
 #     return fig
 if __name__ == "__main__":
     app.run_server(debug = True, port = 8071)
-
-
-
-
-
-
-
