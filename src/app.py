@@ -37,15 +37,9 @@ for file in l:
     j = j+1
 
 years= np.sort(years.astype(int))
-##########################################
-##########################################
-##########################################
 linear_reg_100 = LinearRegression()
 linear_reg_100.fit(years.reshape(-1, 1), ice_area100)
 y100_pred = linear_reg_100.predict(years.reshape(-1, 1))
-##########################################
-##########################################
-##########################################
 linear_reg_50 = LinearRegression()
 linear_reg_50.fit(years.reshape(-1, 1), ice_area50)
 y50_pred = linear_reg_50.predict(years.reshape(-1, 1))
@@ -115,7 +109,6 @@ def update_year(year_index):
     fig.update_yaxes(showticklabels=False)
     fig.update_layout(title_font_size = 30, title_font_family = "Bahnschrift",
                       paper_bgcolor="LightSteelBlue")
-    # fig.update_layout(coloraxis_colorbar= dict(tickvals = [""], ticktext=[""]))
     return fig
 
 # @app.callback(Output("total_area", "children"),
@@ -134,17 +127,10 @@ def update_year(year_index):
               Input("year_slider", "value"))
 def update_year_fig(year_index):
     year = [i for i in years]
-    # fig, ax = plt.subplots()
     fig_data100 = go.Scatter(x = years, y = ice_area100,name = "Area in km2")
-    # , title = "Area totally covered by ice in squared kilometer"
-               #  , trendline = 'ols', trendline_scope = "overall",
-               #       trendline_color_override = "grey")''
-    # fig.add_shape(x = years, y= y_pred)
-        # = px.line(y_pred, years)
     fig_fit100 = go.Scatter(x= years, y = y100_pred,
                          hovertext=f"R2 = {r2_score(ice_area100,y100_pred)} , mean_squared_error = {mean_squared_error(ice_area100,y100_pred)}"
                          ,name = "Linear fit")
-                         # ,hovertext= f"mean_squared_error = {mean_squared_error(ice_area100,y100_pred)}")
     figures100 = [fig_data100,fig_fit100]
     fig = go.Figure(data= figures100)
     fig.update_layout(hovermode="x unified")
@@ -152,11 +138,6 @@ def update_year_fig(year_index):
     fig.update_yaxes(title="Area totally covered by ice [Km2]", title_font_size = 16,title_font_family = "Bahnschrift")
     fig.update_layout(title_font_size = 20, title_font_family = "Bahnschrift",
                       paper_bgcolor="LightSteelBlue")
-    # fig.show()
-    #
-    # fig = px.line(x = years, y = pred_area100)
-    # fig.add_scatter(trendline = "ols")
-
     fig.add_scatter(x = [years[year_index]],y = [ice_area100[year_index]], mode = "markers",
                     marker= dict(color="blue", size=12),name = f'Area totally covered by ice in km2', showlegend=False)
     fig.add_scatter(x=[years[year_index]], y=[y100_pred[year_index]], mode="markers",
@@ -166,12 +147,9 @@ def update_year_fig(year_index):
               Input("year_slider", "value"))
 def update_year_fig(year_index):
     year = [i for i in years]
-    # fig, ax = plt.subplots()
     fig_data50 = go.Scatter(x = years, y = ice_area50,name = "Area in km2")
     fig_fit50 = go.Scatter(x=years, y=y50_pred,hovertext=f"R2 = {r2_score(ice_area50,y50_pred)} , mean_squared_error = {mean_squared_error(ice_area50,y50_pred)}"
                          ,name = "Linear fit")
-    # , title = "Area with at least 50% of ice concentration in squared kilometer"
-                     # ,trendline = 'ols', trendline_scope = "overall",trendline_color_override = "grey")
     figures50 = [fig_data50, fig_fit50]
     fig = go.Figure(data=figures50)
     fig.update_layout(hovermode="x unified")
@@ -184,14 +162,5 @@ def update_year_fig(year_index):
     fig.add_scatter(x=[years[year_index]], y=[y50_pred[year_index]], mode="markers",
                     marker=dict(color="red", size=12), showlegend=False)
     return fig
-# @app.callback(Output("ice_mean_fig", "figure"),
-#               Input("year_slider", "value"))
-# def update_year_fig(year_index):
-#     year = [i for i in years]
-#     # fig, ax = plt.subplots()
-#     fig = px.line(x = years, y = ice_mean, title = "Mean value of ice concentration")
-#     fig.add_scatter(x = [years[year_index]],y = [ice_mean[year_index]], mode = "markers",
-#                     marker= dict(color="blue", size=12), name="",  showlegend=False)
-#     return fig
 if __name__ == "__main__":
-    app.run_server(debug = True, port = 8071)
+    app.run_server(debug = False)
